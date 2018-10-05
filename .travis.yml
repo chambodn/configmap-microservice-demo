@@ -1,10 +1,24 @@
 language: go
+sudo: required
 
 go:
   - 1.10.x
+
+services:
+  - docker
 
 go_import_path: github.com/chambodn/configmap-microservice-demo
 
 before_install:
   - wget -O - https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
   - dep ensure
+
+script:
+  - docker build --rm=true -t dchambon/configmap-microservice-demo:$TRAVIS_BUILD_NUMBER .
+  - docker tag dchambon/configmap-microservice-demo:$TRAVIS_BUILD_NUMBER dchambon/configmap-microservice-demo:latest
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push dchambon/configmap-microservice-demo:$TRAVIS_BUILD_NUMBER
+  - docker push dchambon/configmap-microservice-demo:latest
+
