@@ -41,6 +41,7 @@ func loadConfig(configFile string) *Config {
 }
 
 func main() {
+
 	confManager := NewMutexConfigManager(loadConfig(CONFIG_FILE))
 	//confManager := NewChannelConfigManager(loadConfig(CONFIG_FILE))
 
