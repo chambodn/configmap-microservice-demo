@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
         - name: configmap-microservice-demo
-          image: docker.io/thrawn01/configmap-microservice-demo
+          image: docker.io/dchambon/configmap-microservice-demo
           ports:
             - containerPort: 8080
           volumeMounts:
