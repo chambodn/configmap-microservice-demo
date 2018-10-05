@@ -1,15 +1,15 @@
-FROM golang
+FROM golang:latest AS build-env
+WORKDIR /go/src/github.com/skysoft-atm/tibco-config-tool
+COPY . .
+RUN wget -O - https://raw.githubusercontent.com/golang/dep/master/install.sh | sh && \
+    dep ensure && \
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /go/bin/tibco-config-tool ./main.go
 
-# Copy the local package files to the container's workspace.
-ADD . /go/src/github.com/thrawn01/configmap-microservice-demo
+FROM scratch
 
-RUN go get github.com/julienschmidt/httprouter
-RUN go get gopkg.in/fsnotify.v1
-RUN go get gopkg.in/yaml.v2
-RUN go install github.com/thrawn01/configmap-microservice-demo
-
-# Run the command by default when the container starts.
-ENTRYPOINT /go/bin/configmap-microservice-demo
-
-# Document that the service listens on port 8080.
+WORKDIR /app
+COPY --from=build-env /go/bin/tibco-config-tool tibco-config-tool
+COPY --from=build-env /go/src/github.com/skysoft-atm/tibco-config-tool/configs/application.properties application.properties
 EXPOSE 8080
+
+ENTRYPOINT ["/app/tibco-config-tool"]
