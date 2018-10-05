@@ -9,7 +9,6 @@ FROM scratch
 
 WORKDIR /app
 COPY --from=build-env /go/bin/configmap-microservice-demo configmap-microservice-demo
-COPY --from=build-env /go/src/github.com/chambodn/configmap-microservice-demo/config.yaml config.yaml
 EXPOSE 8080
 
 ENTRYPOINT ["/app/configmap-microservice-demo"]
