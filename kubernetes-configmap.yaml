@@ -4,4 +4,4 @@ metadata:
   name: configmap-microservice-demo
 data:
   configmap-microservice-demo.yaml: |
-    message: Hello World
+    message: Hello Bobby
